@@ -11970,13 +11970,11 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
-
-<span class="n">minimum_price</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
-<span class="n">maximum_price</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">minimum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
+<span class="n">maximum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 <span class="n">mean_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 <span class="n">median_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 <span class="n">std_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
@@ -12194,7 +12192,8 @@ PTRATIO will descrease the housing price, because i think lower class school ten
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer:</strong> Yes because more than 90% variance in Y is predictable from X</p>
+<p><strong>Answer:</strong> Yes because more the R^2 value is 0.923, which means we can capture the variability in the target variabel. High R^2 also means the model have high precision and low prediction interval.
+This also means that 92.3% variance of the Y predictable with our current feature, which is pretty high and we can conclude that we have sufficient feature</p>
 
 </div>
 </div>
@@ -13846,8 +13845,8 @@ kp6IiIQMJT0REQkZ/w9+dF8WI2D+ZQAAAABJRU5ErkJggg==
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
 <ul>
-<li>High bias, because even the training score is low</li>
-<li>If the maximum depth of 10 then it is high variance. I can see because the gap between training and validation score is high, and the validation score has been lower than before</li>
+<li>High bias, the model can not generalize well even from training dataset. This resulst in low score for both in training and validation dataset.</li>
+<li>If the maximum depth of 10 then it is high variance. The model are too complex (almost perfectly memorized the training data) and resulting in low score in validation dataset, this is why there is a large gap between training and validation curve </li>
 </ul>
 
 </div>
@@ -13909,7 +13908,7 @@ kp6IiIQMJT0REQkZ/w9+dF8WI2D+ZQAAAABJRU5ErkJggg==
 <p><strong>Answer: </strong></p>
 <ul>
 <li>Grid Search technique is basically trying to find some set of hyperparameter which yield best result in the modelling. Because we are using DecisionTreeRegressor(), the hyperparameter that we can adjust is max_depth, min_samples_split, min_samples_leaf, etc. The complete hyperparameter list is available in the scikit-learn guide (<a href="http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html">http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html</a>)</li>
-<li>For example we dont know how to find optimal max_depth and min_sample_split and we want to try some possible values. Let's say we want to try max_depth is [1-5] and min_sample_split [3-10]. Grid search technique will try every combination and find out which one yield best results</li>
+<li>For example we dont know how to find optimal max_depth and min_sample_split and we want to try some possible values. Let's say we want to try max_depth is [1-5] and min_sample_split [3-10]. Grid search technique will try every combination and find out which one yield best results by calculating the error metrics (MSE or other metric) in validation data</li>
 </ul>
 
 </div>
@@ -13938,7 +13937,7 @@ kp6IiIQMJT0REQkZ/w9+dF8WI2D+ZQAAAABJRU5ErkJggg==
 <p><strong>Answer: </strong></p>
 <ul>
 <li>K-Fold split the training dataset into K group where K is positive integer where K is &gt; 2. This technique will iterate for each K to be validation set and the rest will be training set</li>
-<li>The cross validation will be useful because test data can only be touched to calculate performance, not to fit the hyperparameter. The K-Fold helps because it doesnt waste too much data</li>
+<li>First, we can not only used training and test set, because test set is used for final measurement for the model not for the hyperparameter optimization, thus we need to add more split in training data for calculating error metric to figure what is the best hyperparameter. K-Fold splitted the training data into K chunk, use 1 part for validation dataset and the rest for training, and iterate until all chunks is used for validation and the final result is the mean of the error. This process will help to not wasting a lot of data, and make sure the hyperparameter is best for all observation not only based specific dataset</li>
 </ul>
 
 </div>
@@ -13975,7 +13974,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
@@ -13999,7 +13998,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 
     <span class="c1"># Make sure to include the right parameters in the object:</span>
     <span class="c1"># (estimator, param_grid, scoring, cv) which have values &#39;regressor&#39;, &#39;params&#39;, &#39;scoring_fnc&#39;, and &#39;cv_sets&#39; respectively.</span>
-    <span class="n">grid</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">regressor</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">scoring_fnc</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_sets</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">regressor</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">scoring</span> <span class="o">=</span> <span class="n">scoring_fnc</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv_sets</span><span class="p">)</span>
 
     <span class="c1"># Fit the grid search object to the data to compute the optimal model</span>
     <span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -14036,7 +14035,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Fit the training data to the model using grid search</span>
@@ -14074,7 +14073,7 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong> Hint: </strong> The answer comes from the output of the code snipped above.</p>
-<p><strong>Answer: </strong> 5</p>
+<p><strong>Answer: </strong> 5, the result is slightly different that i get from observing the graph which is 4.</p>
 
 </div>
 </div>
@@ -14125,6 +14124,76 @@ For the <code>fit_model</code> function in the code cell below, you will need to
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Show the calculated statistics</span>
+<span class="k">print</span> <span class="s2">&quot;Statistics for Boston housing dataset:</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+<span class="k">print</span> <span class="s2">&quot;Minimum room number: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;RM&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Maximum room number: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;RM&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Mean room number: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;RM&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Median room number {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;RM&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Standard deviation of room number: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;RM&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="k">print</span> <span class="s2">&quot;Minimum poverty level: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;LSTAT&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Maximum poverty level: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;LSTAT&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Mean poverty level: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;LSTAT&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Median poverty level {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;LSTAT&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Standard deviation of poverty level: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;LSTAT&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="k">print</span> <span class="s2">&quot;Minimum student-teacher ratio: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;PTRATIO&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Maximum student-teacher ratio: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;PTRATIO&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Mean student-teacher ratio: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;PTRATIO&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Median student-teacher ratio {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;PTRATIO&#39;</span><span class="p">]))</span>
+<span class="k">print</span> <span class="s2">&quot;Standard deviation of student-teacher ratio: {:,.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;PTRATIO&#39;</span><span class="p">]))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Statistics for Boston housing dataset:
+
+Minimum room number: 3.56
+Maximum room number: 8.40
+Mean room number: 6.24
+Median room number 6.18
+Standard deviation of room number: 0.64
+
+
+Minimum poverty level: 1.98
+Maximum poverty level: 37.97
+Mean poverty level: 12.94
+Median poverty level 11.69
+Standard deviation of poverty level: 7.07
+
+
+Minimum student-teacher ratio: 12.60
+Maximum student-teacher ratio: 22.00
+Mean student-teacher ratio: 18.52
+Median student-teacher ratio 19.10
+Standard deviation of student-teacher ratio: 2.11
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 <div class="prompt input_prompt">In&nbsp;[57]:</div>
 <div class="inner_cell">
     <div class="input_area">
@@ -14170,7 +14239,9 @@ Predicted selling price for Client 3&#39;s home: $927,500.00
 <p><strong>Answer: </strong></p>
 <ul>
 <li>The price is USD 428,800.00, USD 230,776.60 and USD 927,500.00 respectively</li>
-<li>Reasonable based on answer no 1 that higher <strong>Total Number of Room</strong> means higher price and higher <strong>Neighborhood Poverty Level</strong> and <strong>Student-Teacher ratio</strong> means lower price</li>
+<li>For Client 1, the feature are mid level, so the price should be around the mean</li>
+<li>For Client 2, we can see the room number is low and both the poverty rate and student-teacher ratio is high so the price should be low</li>
+<li>Client 3 house is big, placed in low poverty area and the ratio of student-teacher is low, the price much be high</li>
 </ul>
 
 </div>
@@ -14251,14 +14322,7 @@ Range in prices: $73,357.39
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong></p>
-<ul>
-<li>The data from 1978 is not relevant today as the price must be higher now after almost 40 years</li>
-<li>Yes, these features should be added in the modelling</li>
-<li>Not really, the ranges is about 70K USD, it is about 10-20% of the mean estimation</li>
-<li>Of course not, the area itself matter in term of the housing prices</li>
-<li>Not really, even in the poor neighborhood can be a luxury house</li>
-</ul>
+<p><strong>Answer: </strong> I do not think the model is ready for real world setting. The data is collected almost 40 years ago, for all these years i'm sure the price has changed a lot. Another thing is we only used 3 feature of it in which every feature is only judged by the environment, where the housing price feature should be specific to the house, like the size of the house, number of floor and etc. The dataset is collected in boston, so the model may be valid only to predict house in boston area. The model itself not really precise, as we see above, the range is about USD 70k or about 10-20 of the mean</p>
 
 </div>
 </div>
